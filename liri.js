@@ -32,6 +32,15 @@ if (command === "my-tweets"){
         }
     });
 }
+else if (command === "spotify-this-song"){
+    console.log("spotify statement");
+}
+else if(command === "movie-this"){
+    console.log("movies statement");
+}
+else if(command === "do-what-it-says"){
+    console.log("do what it says");
+}
 else{
-    console.log("no");
+    console.log("Please enter a proper command\n > my-tweets \n > spotify-this-song \n > movie-this \n > do-what-it-says\n");
 }

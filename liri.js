@@ -7,11 +7,13 @@ var Spotify = require("node-spotify-api");
 var keys = require('./keys');
 var spotify = new Spotify(keys.spotify)
 var client = new twitter(keys.twitter);
+var request = require('request');
 
 
 // commands
 var command = process.argv[2];
 var songName = process.argv[3];
+var movieName = process.argv[3];
 //console.log("Command is: " +command);
 //console.log(songName);
 if (command === "my-tweets"){
@@ -59,7 +61,35 @@ else if (command === "spotify-this-song"){
     });
 }
 else if(command === "movie-this"){
-    console.log("movies statement");
+    var queryURL = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    request(queryURL, function (error, response, body) {
+        //console.log('error:', error); // Print the error if one occurred
+        //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        //console.log('body:', body); // Print the HTML for the Google homepage.
+        //title
+        let JSONBody = JSON.parse(body);
+        //console.log(JSON.parse(body).Title);
+        console.log("Title: " + JSONBody.Title);
+        console.log("Year: " + JSONBody.Year);
+        //rating imdb
+        for (let i = 0; i < JSONBody.Ratings.length; i++){
+            if (JSONBody.Ratings[i].Source === "Internet Movie Database"){
+                console.log("IMDB Rating: " + JSONBody.Ratings[i].Value);
+            }
+            else if(JSONBody.Ratings[i].Source === "Rotten Tomatoes"){
+                console.log("Rotten Tomatoes Rating: " + JSONBody.Ratings[i].Value);
+            }
+            else{
+                // Do Nothing
+            }
+        }
+
+        console.log("Country Produced: " + JSONBody.Country);
+        console.log("Language: " + JSONBody.Language);
+        console.log("Plot: " + JSONBody.Plot);
+        console.log("Actors: " + JSONBody.Actors);
+
+    });
 }
 else if(command === "do-what-it-says"){
     console.log("do what it says");

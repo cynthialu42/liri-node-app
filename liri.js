@@ -3,14 +3,17 @@
 require("dotenv").config();
 var fs = require("fs");
 var twitter = require("twitter");
+var Spotify = require("node-spotify-api");
 var keys = require('./keys');
-//var spotify = new spotify(keys.spotify)
+var spotify = new Spotify(keys.spotify)
 var client = new twitter(keys.twitter);
 
 
 // commands
 var command = process.argv[2];
+var songName = process.argv[3];
 //console.log("Command is: " +command);
+//console.log(songName);
 if (command === "my-tweets"){
     var params = {screen_name: 'sadmayo'};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
@@ -30,10 +33,30 @@ if (command === "my-tweets"){
             } 
             console.log("============================================================")
         }
+        else{
+            console.log("An error has occured: " + error);
+        }
     });
 }
 else if (command === "spotify-this-song"){
-    console.log("spotify statement");
+    spotify.search({type: 'track', query: songName}, function(error, data){
+        if(!error){
+            let firstResult = data.tracks.items[0];
+            //console.log(firstResult);
+            let artistList = "";
+            for (let i = 0; i < firstResult.artists.length; i++){
+                artistList += firstResult.artists[i].name + "\n";
+            }
+            console.log("Artist: " + artistList);
+            console.log("Title: " + firstResult.name);
+            console.log("Preview Song: " + firstResult.preview_url);
+            console.log("Album Name: " + firstResult.album.name);
+            
+        }
+        else{
+            console.log("An error has occured: " + error);
+        }
+    });
 }
 else if(command === "movie-this"){
     console.log("movies statement");

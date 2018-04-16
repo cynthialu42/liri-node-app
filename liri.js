@@ -12,12 +12,12 @@ var request = require('request');
 
 // commands
 var command = process.argv[2];
-var songName = process.argv[3];
-var movieName = process.argv[3];
+//var songName = process.argv[3];
+//var movieName = process.argv[3];
 //console.log("Command is: " +command);
 //console.log(songName);
-if (command === "my-tweets"){
-    var params = {screen_name: 'sadmayo'};
+function myTweets(){
+    var params = {screen_name: 'bts_twt'};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error) {
             var numOfTweets = 0;
@@ -31,7 +31,7 @@ if (command === "my-tweets"){
             }
             for (let i = 0; i < numOfTweets; i++){
                 console.log("============== " + tweets[i].created_at + " ============== \n")
-                console.log(tweets[0].text + " ~" + params.screen_name + "\n");
+                console.log(tweets[i].text + " ~" + params.screen_name + "\n");
             } 
             console.log("============================================================")
         }
@@ -40,8 +40,9 @@ if (command === "my-tweets"){
         }
     });
 }
-else if (command === "spotify-this-song"){
-    spotify.search({type: 'track', query: songName}, function(error, data){
+
+function spotifyThisSong(songTitle){
+    spotify.search({type: 'track', query: songTitle}, function(error, data){
         if(!error){
             let firstResult = data.tracks.items[0];
             //console.log(firstResult);
@@ -60,7 +61,8 @@ else if (command === "spotify-this-song"){
         }
     });
 }
-else if(command === "movie-this"){
+
+function movieThis(movieName){
     var queryURL = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
     request(queryURL, function (error, response, body) {
         //console.log('error:', error); // Print the error if one occurred
@@ -91,8 +93,36 @@ else if(command === "movie-this"){
 
     });
 }
+
+if (command === "my-tweets"){
+    myTweets();
+}
+else if (command === "spotify-this-song"){
+    let songName = process.argv[3];
+    spotifyThisSong(songName);
+}
+else if(command === "movie-this"){
+    let movieName = process.argv[3];
+    movieThis(movieName);
+}
 else if(command === "do-what-it-says"){
-    console.log("do what it says");
+    //console.log("do what it says");
+    fs.readFile("./random.txt", "utf8", function(error, data){ 
+        var dataArr = data.split(',');
+        console.log(dataArr);
+        if (dataArr[0] === "my-tweets"){
+            myTweets();
+        }
+        else if (dataArr[0] === "spotify-this-song"){
+            spotifyThisSong(dataArr[1]);
+        }
+        else if (dataArr[0] === "movie-this"){
+            movieThis(dataArr[1]);
+        }
+        else{
+            console.log("Nothing to do here!");
+        }
+    });
 }
 else{
     console.log("Please enter a proper command\n > my-tweets \n > spotify-this-song \n > movie-this \n > do-what-it-says\n");

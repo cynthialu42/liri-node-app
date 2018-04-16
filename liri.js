@@ -16,8 +16,8 @@ var command = process.argv[2];
 //var movieName = process.argv[3];
 //console.log("Command is: " +command);
 //console.log(songName);
-function myTweets(){
-    var params = {screen_name: 'bts_twt'};
+function myTweets(twitterHandle){
+    var params = {screen_name: twitterHandle};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error) {
             var numOfTweets = 0;
@@ -51,9 +51,14 @@ function spotifyThisSong(songTitle){
                 artistList += firstResult.artists[i].name + "\n";
             }
             console.log("Artist: " + artistList);
-            console.log("Title: " + firstResult.name);
-            console.log("Preview Song: " + firstResult.preview_url);
-            console.log("Album Name: " + firstResult.album.name);
+            console.log("Title: " + firstResult.name + "\n");
+            if (firstResult.preview_url == null){
+                console.log("No Preview, Full Song: " + firstResult.external_urls.spotify + "\n");
+            }
+            else{
+                console.log("Preview Song: " + firstResult.preview_url + "\n");
+            }
+            console.log("Album Name: " + firstResult.album.name + "\n");
             
         }
         else{
@@ -94,24 +99,13 @@ function movieThis(movieName){
     });
 }
 
-if (command === "my-tweets"){
-    myTweets();
-}
-else if (command === "spotify-this-song"){
-    let songName = process.argv[3];
-    spotifyThisSong(songName);
-}
-else if(command === "movie-this"){
-    let movieName = process.argv[3];
-    movieThis(movieName);
-}
-else if(command === "do-what-it-says"){
-    //console.log("do what it says");
+function doWhatItSays(){
     fs.readFile("./random.txt", "utf8", function(error, data){ 
         var dataArr = data.split(',');
-        console.log(dataArr);
         if (dataArr[0] === "my-tweets"){
-            myTweets();
+            // Need to cut out the quotes to work
+            var noQuotes = dataArr[1].substring(1,dataArr[1].length-1);
+            myTweets(noQuotes);
         }
         else if (dataArr[0] === "spotify-this-song"){
             spotifyThisSong(dataArr[1]);
@@ -124,6 +118,22 @@ else if(command === "do-what-it-says"){
         }
     });
 }
+
+if (command === "my-tweets"){
+    let twitterHandle = process.argv[3];
+    myTweets(twitterHandle);
+}
+else if (command === "spotify-this-song"){
+    let songName = process.argv[3];
+    spotifyThisSong(songName);
+}
+else if(command === "movie-this"){
+    let movieName = process.argv[3];
+    movieThis(movieName);
+}
+else if(command === "do-what-it-says"){
+    doWhatItSays();
+}
 else{
-    console.log("Please enter a proper command\n > my-tweets \n > spotify-this-song \n > movie-this \n > do-what-it-says\n");
+    console.log("Please enter a proper command after node liri.js \n > my-tweets \"< twitter handle >\"\n > spotify-this-song \"< song title >\"\n > movie-this \"< movie title >\"\n > do-what-it-says\n");
 }

@@ -121,14 +121,23 @@ function doWhatItSays(){
 
 if (command === "my-tweets"){
     let twitterHandle = process.argv[3];
+    if (twitterHandle == undefined){
+        twitterHandle = "bts_twt";
+    }
     myTweets(twitterHandle);
 }
 else if (command === "spotify-this-song"){
     let songName = process.argv[3];
+    if (songName == undefined){
+        songName = "The Sign";
+    }
     spotifyThisSong(songName);
 }
 else if(command === "movie-this"){
     let movieName = process.argv[3];
+    if (movieName == undefined){
+        movieName = "Mr. Nobody";
+    }
     movieThis(movieName);
 }
 else if(command === "do-what-it-says"){

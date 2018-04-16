@@ -22,10 +22,10 @@ function myTweets(twitterHandle){
                 numOfTweets = 20;
             }
             for (let i = 0; i < numOfTweets; i++){
-                console.log("============== " + tweets[i].created_at + " ============== \n")
+                console.log("============== " + tweets[i].created_at + " ============== \n");
                 console.log(tweets[i].text + " ~" + params.screen_name + "\n");
             } 
-            console.log("============================================================")
+            console.log("============================================================");
         }
         else{
             console.log("An error has occured: " + error);
@@ -43,6 +43,7 @@ function spotifyThisSong(songTitle){
             for (let i = 0; i < firstResult.artists.length; i++){
                 artistList += firstResult.artists[i].name + "\n";
             }
+            console.log("============================================================\n");
             console.log("Artist: " + artistList);
             console.log("Title: " + firstResult.name + "\n");
             if (firstResult.preview_url == null){
@@ -52,7 +53,7 @@ function spotifyThisSong(songTitle){
                 console.log("Preview Song: " + firstResult.preview_url + "\n");
             }
             console.log("Album Name: " + firstResult.album.name + "\n");
-            
+            console.log("\n============================================================");
         }
         else{
             console.log("An error has occured: " + error);
@@ -67,6 +68,7 @@ function movieThis(movieName){
         if (!error){
             let JSONBody = JSON.parse(body);
             //console.log(JSON.parse(body).Title);
+            console.log("============================================================\n");
             console.log("Title: " + JSONBody.Title);
             console.log("Year: " + JSONBody.Year);
             //rating imdb
@@ -86,6 +88,7 @@ function movieThis(movieName){
             console.log("Language: " + JSONBody.Language);
             console.log("Plot: " + JSONBody.Plot);
             console.log("Actors: " + JSONBody.Actors);
+            console.log("\n============================================================");
     
         }
         else{

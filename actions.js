@@ -21,11 +21,17 @@ function myTweets(twitterHandle){
             else{
                 numOfTweets = 20;
             }
+
+            let tweetOutput = "";
+            tweetOutput += "========================= My-Tweets ========================\n";
             for (let i = 0; i < numOfTweets; i++){
-                console.log("============== " + tweets[i].created_at + " ============== \n");
+                //console.log("-------------- " + tweets[i].created_at + " -------------- \n");
                 console.log(tweets[i].text + " ~" + params.screen_name + "\n");
+                tweetOutput += "\n-------------- " + tweets[i].created_at + " -------------- \n\n"
+                    + tweets[i].text + " ~" + params.screen_name + "\n";
             } 
-            console.log("============================================================");
+            tweetOutput += "\n============================================================\n";
+            console.log(tweetOutput);
         }
         else{
             console.log("An error has occured: " + error);
@@ -38,22 +44,26 @@ function spotifyThisSong(songTitle){
     spotify.search({type: 'track', query: songTitle}, function(error, data){
         if(!error){
             let firstResult = data.tracks.items[0];
-            //console.log(firstResult);
             let artistList = "";
+            let songOutput = "";
             for (let i = 0; i < firstResult.artists.length; i++){
                 artistList += firstResult.artists[i].name + "\n";
             }
-            console.log("============================================================\n");
-            console.log("Artist: " + artistList);
-            console.log("Title: " + firstResult.name + "\n");
+            songOutput += "==================== Spotify-This-Song =====================\n";
+            songOutput += "Artist: " + artistList + "\n"
+                + "Title: " + firstResult.name + "\n";
+            //console.log("Title: " + firstResult.name + "\n");
             if (firstResult.preview_url == null){
-                console.log("No Preview, Full Song: " + firstResult.external_urls.spotify + "\n");
+                //console.log("No Preview, Full Song: " + firstResult.external_urls.spotify + "\n");
+                songOutput += "No Preview, Full Song: " + firstResult.external_urls.spotify + "\n";
             }
             else{
-                console.log("Preview Song: " + firstResult.preview_url + "\n");
+                //console.log("Preview Song: " + firstResult.preview_url + "\n");
+                songOutput += "Preview Song: " + firstResult.preview_url + "\n"
             }
-            console.log("Album Name: " + firstResult.album.name + "\n");
-            console.log("\n============================================================");
+            songOutput += "Album Name: " + firstResult.album.name + "\n";
+            songOutput += "\n============================================================\n";
+            console.log(songOutput);
         }
         else{
             console.log("An error has occured: " + error);
@@ -67,29 +77,27 @@ function movieThis(movieName){
     request(queryURL, function (error, response, body) {
         if (!error){
             let JSONBody = JSON.parse(body);
-            //console.log(JSON.parse(body).Title);
-            console.log("============================================================\n");
-            console.log("Title: " + JSONBody.Title);
-            console.log("Year: " + JSONBody.Year);
-            //rating imdb
+            let movieOutput = "";
+            movieOutput += "======================== Movie-This ========================\n";
+            movieOutput += "\nTitle: " + JSONBody.Title + "\nYear: "+ JSONBody.Year + "\n";
+            
             for (let i = 0; i < JSONBody.Ratings.length; i++){
                 if (JSONBody.Ratings[i].Source === "Internet Movie Database"){
-                    console.log("IMDB Rating: " + JSONBody.Ratings[i].Value);
+                    movieOutput += "IMDB Rating: " + JSONBody.Ratings[i].Value + "\n";
                 }
                 else if(JSONBody.Ratings[i].Source === "Rotten Tomatoes"){
-                    console.log("Rotten Tomatoes Rating: " + JSONBody.Ratings[i].Value);
+                    movieOutput += "Rotten Tomatoes Rating: " + JSONBody.Ratings[i].Value  + "\n";
                 }
                 else{
                     // Do Nothing
                 }
             }
-    
-            console.log("Country Produced: " + JSONBody.Country);
-            console.log("Language: " + JSONBody.Language);
-            console.log("Plot: " + JSONBody.Plot);
-            console.log("Actors: " + JSONBody.Actors);
-            console.log("\n============================================================");
-    
+            movieOutput += "Country Produced: " + JSONBody.Country + "\n"
+                + "Language: " + JSONBody.Language + "\n"
+                + "Plot: " + JSONBody.Plot + "\n"
+                + "Actors: " + JSONBody.Actors + "\n"
+                + "\n============================================================\n"
+            console.log(movieOutput);
         }
         else{
             console.log("An error has occured: " + error);

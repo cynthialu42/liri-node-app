@@ -25,13 +25,16 @@ function myTweets(twitterHandle){
             let tweetOutput = "";
             tweetOutput += "========================= My-Tweets ========================\n";
             for (let i = 0; i < numOfTweets; i++){
-                //console.log("-------------- " + tweets[i].created_at + " -------------- \n");
-                console.log(tweets[i].text + " ~" + params.screen_name + "\n");
                 tweetOutput += "\n-------------- " + tweets[i].created_at + " -------------- \n\n"
                     + tweets[i].text + " ~" + params.screen_name + "\n";
             } 
             tweetOutput += "\n============================================================\n";
             console.log(tweetOutput);
+            fs.appendFile("activityLog.txt", tweetOutput + "\n\n", function(error){
+                if (error){
+                    console.log("Error appending content to file: " + error);
+                }
+            });
         }
         else{
             console.log("An error has occured: " + error);
@@ -50,20 +53,22 @@ function spotifyThisSong(songTitle){
                 artistList += firstResult.artists[i].name + "\n";
             }
             songOutput += "==================== Spotify-This-Song =====================\n";
-            songOutput += "Artist: " + artistList + "\n"
+            songOutput += "\nArtist: " + artistList
                 + "Title: " + firstResult.name + "\n";
-            //console.log("Title: " + firstResult.name + "\n");
             if (firstResult.preview_url == null){
-                //console.log("No Preview, Full Song: " + firstResult.external_urls.spotify + "\n");
                 songOutput += "No Preview, Full Song: " + firstResult.external_urls.spotify + "\n";
             }
             else{
-                //console.log("Preview Song: " + firstResult.preview_url + "\n");
                 songOutput += "Preview Song: " + firstResult.preview_url + "\n"
             }
             songOutput += "Album Name: " + firstResult.album.name + "\n";
             songOutput += "\n============================================================\n";
             console.log(songOutput);
+            fs.appendFile("activityLog.txt", songOutput + "\n\n", function(error){
+                if (error){
+                    console.log("Error appending content to file: " + error);
+                }
+            });
         }
         else{
             console.log("An error has occured: " + error);
@@ -98,6 +103,11 @@ function movieThis(movieName){
                 + "Actors: " + JSONBody.Actors + "\n"
                 + "\n============================================================\n"
             console.log(movieOutput);
+            fs.appendFile("activityLog.txt", movieOutput + "\n\n", function(error){
+                if (error){
+                    console.log("Error appending content to file: " + error);
+                }
+            });
         }
         else{
             console.log("An error has occured: " + error);
@@ -110,6 +120,11 @@ function movieThis(movieName){
 function doWhatItSays(){
     fs.readFile("./random.txt", "utf8", function(error, data){ 
         if (!error){
+            fs.appendFile("activityLog.txt", "=================== Begin do-what-it-says ==================\n\n", function(error){
+                if (error){
+                    console.log("Error appending content to file: " + error);
+                }
+            });
             var dataArr = data.split(',');
             if (dataArr[0] === "my-tweets"){
                 // Need to cut out the quotes to work
